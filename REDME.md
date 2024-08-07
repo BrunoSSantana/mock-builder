@@ -1,0 +1,1 @@
+inspired by [fluentbuilder](https://github.com/lucasteles/fluentbuilder)
