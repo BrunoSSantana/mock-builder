@@ -18,7 +18,8 @@
         "preversion": "npm run style:check",
         "version": "npm run style:check && git add -A src",
         "postversion": "git push && git push --tags",
-        "lint": "npx @biomejs/biome lint ./src"
+        "lint": "npx @biomejs/biome lint ./src",
+        "release": "pnpm run build && changeset publish"
     },
     "keywords": [
         "Mock",
