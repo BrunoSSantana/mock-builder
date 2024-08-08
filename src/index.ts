@@ -1,9 +1,9 @@
 import { faker } from "@faker-js/faker";
-import randomInt from "./random";
+import { type RandomInt, randomInt } from "./random";
 
 export type Faker = typeof faker;
 
-export default class Builder<T> {
+export class Builder<T> {
   private rules: ((dataFactory: Faker) => any)[] = [];
 
   addShape(shape: (dataFactory: Faker) => Partial<T>): this {
@@ -38,7 +38,7 @@ export default class Builder<T> {
       : <T>generate();
   }
 
-  generateRandom(qtdMin: number, qtdMax?: number): T[] {
+  generateRandom(randomInt: RandomInt, qtdMin: number, qtdMax?: number): T[] {
     const rand = randomInt(qtdMin, qtdMax);
     return this.generate(rand === 0 ? 1 : rand);
   }
@@ -66,14 +66,19 @@ export function generate<T>(
   return createBuilder<T>(shape).generate(<any>qtd);
 }
 
-export function setLocale(locale: string): void {
-  (<any>faker).locale = locale;
-}
+// export function setLocale(locale: string): void {
+//   (faker).location.
+// }
 
 export function generateRandom<T>(
+  makeRandom: RandomInt,
   shape: (dataFactory: Faker) => Partial<T>,
   qtdMin: number,
   qtdMax?: number,
 ): T[] {
-  return createBuilder<T>(<any>shape).generateRandom(qtdMin, qtdMax);
+  return createBuilder<T>(<any>shape).generateRandom(
+    makeRandom,
+    qtdMin,
+    qtdMax,
+  );
 }

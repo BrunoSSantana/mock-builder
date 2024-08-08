@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import random from "./random";
+import { randomInt as random } from "./random";
 
 it("should generate random numbers from 0 to 10", () => {
   for (let x = 0; x < 100; x++) {
