@@ -17,7 +17,8 @@
         "prepublishOnly": "npm test && npm run style:check",
         "preversion": "npm run style:check",
         "version": "npm run style:check && git add -A src",
-        "postversion": "git push && git push --tags"
+        "postversion": "git push && git push --tags",
+        "lint": "npx @biomejs/biome lint ./src"
     },
     "keywords": [
         "Mock",
