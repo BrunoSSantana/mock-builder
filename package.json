@@ -1,8 +1,8 @@
 {
-    "name": "mock-builder",
+    "name": "@brunoss/mock-builder",
     "version": "0.0.0",
     "description": "Mock Builder for FakerJS and Vitest",
-    "author": "Bruno Santana <@BrunoSSantana>",
+    "author": "Bruno Santana <@brunossantana>",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
@@ -41,5 +41,11 @@
         "@vitest/coverage-v8": "2.0.5",
         "tsup": "8.2.4",
         "typescript": "5.5.4"
-    }
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "files": [
+        "dist"
+    ]
 }
