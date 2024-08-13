@@ -1,6 +1,6 @@
 # mock-builder
 
-inspired by [fluentbuilder](https://github.com/lucasteles/fluentbuilder)
+Forked from [fluentbuilder](https://github.com/lucasteles/fluentbuilder)
 
 ## How to install
 
