@@ -49,4 +49,5 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+      - run: npm ci
       - run: npx jsr publish
