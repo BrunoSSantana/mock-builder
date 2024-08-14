@@ -36,7 +36,7 @@ export class Builder<T> {
   /**
    * ## Builds an object
    *
-   * @returns T
+   * @returns an object with values defined by the shape
    *
    * @example
    * ```ts
