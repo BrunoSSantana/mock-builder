@@ -43,7 +43,7 @@ export class Builder<T> {
    * ```
    */
   constructor(shape: Shape<T>) {
-    this._shape = shape;
+    this._shape = { ...shape };
   }
 
   /**
@@ -87,11 +87,9 @@ export class Builder<T> {
    * const result = builder.build(); // { id: 123, name: "Alice" }
    * ```
    */
-  withValue<K extends keyof T>(prop: K, value: T[K]): this {
-    const newShape = { ...this._shape };
-    newShape[prop] = () => value;
-    this._shape = newShape;
-    return this;
+  withValue<K extends keyof T>(prop: K, value: T[K]): Builder<T> {
+    const newShape: Shape<T> = { ...this._shape, [prop]: () => value };
+    return new Builder(newShape);
   }
 
   /**
@@ -115,25 +113,34 @@ export class Builder<T> {
     condition: boolean,
     trueValue: T[K],
     falseValue: T[K],
-  ): this {
-    this._shape[prop] = () => (condition ? trueValue : falseValue);
-    return this;
+  ): Builder<T> {
+    const newShape: Shape<T> = {
+      ...this._shape,
+      [prop]: () => (condition ? trueValue : falseValue),
+    };
+    return new Builder(newShape);
   }
 
   /**
    * Applies default values to properties that are not yet defined in the shape.
    *
-   * @param defaults - An object containing default values for properties.
+   * If a default value is a function, it will be executed during the `build()` method
+   * to determine the final value.
    *
+   * @param defaults - An object containing default values for properties.
    * @returns The current `Builder` instance for chaining.
    *
    * @example
    * ```ts
-   * builder.applyDefaultValues({ age: () => 30, isActive: true });
+   * builder.applyDefaultValues({ age: 30, isActive: true });
+   * builder.applyDefaultValues({ age: () => Math.floor(Math.random() * 100), isActive: true });
+   *
+   * const result = builder.build();
+   * // Result might be { age: 45, isActive: true } depending on the random value generated.
    * ```
    */
-  applyDefaultValues(defaults: Partial<Shape<T>>): this {
-    this._shape = { ...defaults, ...this._shape };
-    return this;
+  applyDefaultValues(defaults: Partial<Shape<T>>): Builder<T> {
+    const newShape: Shape<T> = { ...defaults, ...this._shape };
+    return new Builder(newShape);
   }
 }

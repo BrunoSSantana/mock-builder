@@ -33,4 +33,25 @@ describe("class instance testes", () => {
     expect(firstFooObject.id).not.equal(secondFooObject.id);
     expect(firstFooObject.name).not.toEqual(secondFooObject.name);
   });
+
+  it("should apply default values", () => {
+    const baseProfileBuilder = new Builder({
+      name: "Default",
+      age: 25,
+      isAdmin: false,
+    });
+
+    const adminProfileBuilder = baseProfileBuilder.withValue("isAdmin", true);
+
+    const userProfileBuilder = baseProfileBuilder
+      .withValue("isAdmin", false)
+      .withValue("age", 30);
+
+    const adminProfile = adminProfileBuilder.build();
+    const userProfile = userProfileBuilder.build();
+
+    expect(adminProfile.isAdmin).toBe(true);
+    expect(userProfile.isAdmin).toBe(false);
+    expect(userProfile.age).toBe(30);
+  });
 });
