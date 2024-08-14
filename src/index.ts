@@ -19,6 +19,13 @@ export class Builder<T> {
    *   id: faker.number.int,
    *   name: faker.lorem.word
    * });
+   *```
+   * @example
+   *```ts
+   * const builder = new Builder({
+   *   id: 1,
+   *   name: "foo"
+   * });
    *
    * ```
    */
