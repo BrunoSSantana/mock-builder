@@ -1,5 +1,5 @@
 {
   "name": "@brunossantana/mock-builder",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "exports": "./src/index.ts"
 }

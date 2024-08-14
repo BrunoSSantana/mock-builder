@@ -1,84 +1,26 @@
-import { faker } from "@faker-js/faker";
-import { type RandomInt, randomInt } from "./random";
-
-export type Faker = typeof faker;
+export type Shape<T> = {
+  [K in keyof T]: T[K] | (() => T[K]);
+};
 
 export class Builder<T> {
-  private rules: ((dataFactory: Faker) => any)[] = [];
+  private _shape: Shape<T>;
 
-  addShape(shape: (dataFactory: Faker) => Partial<T>): this {
-    this.rules.push(shape);
-    return this;
+  constructor(shape: Shape<T>) {
+    this._shape = shape;
   }
 
-  ruleFor<K extends keyof T>(property: K, v: T[K]): this;
-  ruleFor<K extends keyof T>(
-    property: K,
-    v: (dataFactory: Faker) => T[K],
-  ): this;
-  ruleFor<K extends keyof T>(
-    property: K,
-    v: T[K] | ((dataFactory: Faker) => T[K]),
-  ): this {
-    const factory = () => ({
-      [property]: v instanceof Function ? v(faker) : v,
-    });
-    this.addShape(<any>factory);
-    return this;
+  build(): T {
+    const data = Object.entries(this._shape).reduce((acc, [key, value]) => {
+      if (typeof value === "function") {
+        // @ts-expect-error
+        acc[key] = value();
+      } else {
+        // @ts-expect-error
+        acc[key] = value;
+      }
+      return acc;
+    }, {} as T);
+
+    return data;
   }
-
-  generate(qtd: number): T[];
-  generate(): T;
-  generate(qtd?: number): T | T[] {
-    const generate = () =>
-      this.rules.reduce((a, b) => ({ ...a, ...b(faker) }), {});
-
-    return qtd
-      ? <T[]>Array.apply(0, Array(qtd)).map(() => generate())
-      : <T>generate();
-  }
-
-  generateRandom(randomInt: RandomInt, qtdMin: number, qtdMax?: number): T[] {
-    const rand = randomInt(qtdMin, qtdMax);
-    return this.generate(rand === 0 ? 1 : rand);
-  }
-}
-
-export function createBuilder<T>(
-  shape: (dataFactory: Faker) => Partial<T>,
-): Builder<T> {
-  return new Builder<T>().addShape(shape);
-}
-
-export function generate<T>(
-  shape: (dataFactory: Faker) => Partial<T>,
-  qtd: number,
-): T[];
-export function generate<T>(shape: (dataFactory: Faker) => Partial<T>): T;
-export function generate<T>(
-  shape: (dataFactory: Faker) => Partial<T>,
-  qtd?: number,
-): T | T[];
-export function generate<T>(
-  shape: ((dataFactory: Faker) => Partial<T>) | (() => Partial<T>),
-  qtd?: number,
-): T | T[] {
-  return createBuilder<T>(shape).generate(<any>qtd);
-}
-
-// export function setLocale(locale: string): void {
-//   (faker).location.
-// }
-
-export function generateRandom<T>(
-  makeRandom: RandomInt,
-  shape: (dataFactory: Faker) => Partial<T>,
-  qtdMin: number,
-  qtdMax?: number,
-): T[] {
-  return createBuilder<T>(<any>shape).generateRandom(
-    makeRandom,
-    qtdMin,
-    qtdMax,
-  );
 }

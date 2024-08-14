@@ -1,8 +1,7 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { Builder } from "./index";
-import { createBuilder, generate, generateRandom } from "./index";
+import { describe, expect, it } from "vitest";
 
-const mockRandom = vi.fn();
+import { faker } from "@faker-js/faker";
+import { Builder, type Shape } from "./index";
 
 interface Foo {
   id: number;
@@ -10,164 +9,28 @@ interface Foo {
 }
 
 describe("class instance testes", () => {
-  let builder: Builder<Foo>;
-  beforeEach(() => {
-    builder = new Builder<Foo>();
-  });
-
-  afterEach(() => {
-    mockRandom.mockClear();
-  });
-
-  it("should create", () => {
-    expect(builder).toBeTruthy();
-  });
-
   it("should build from shape", () => {
-    const shape: Partial<Foo> = {
+    let shape: Shape<Foo> = {
       id: 1,
-    };
-    const value = builder.addShape(() => shape).generate();
-
-    expect(value).toStrictEqual(shape);
-  });
-
-  it("should build from  complex shape", () => {
-    const shape: Partial<Foo> = {
-      id: 1,
-      name: "name",
-    };
-    const value = builder.addShape(() => shape).generate();
-    expect(value).toStrictEqual(shape);
-  });
-
-  it("should define a value from a string property rule", () => {
-    const value = builder.ruleFor("id", () => 1).generate();
-
-    expect(value).toStrictEqual({ id: 1 });
-  });
-
-  it("should define a value from a string property rule as value", () => {
-    const value = builder.ruleFor("id", 1).generate();
-
-    expect(value).toStrictEqual({ id: 1 });
-  });
-
-  it("should generate multiple instances of a shape ", () => {
-    const shape: Partial<Foo> = {
-      id: 1,
-      name: "name",
+      name: "foo",
     };
 
-    const value = builder.addShape(() => shape).generate(2);
-    expect(value).toStrictEqual([shape, shape]);
-  });
+    let builder: Builder<Foo> = new Builder(shape);
+    let firstFooObject = builder.build();
+    let secondFooObject = builder.build();
 
-  it("should generate data in fix range", () => {
-    const shape: Partial<Foo> = {
-      id: 1,
-      name: "name",
+    expect(firstFooObject).toStrictEqual(secondFooObject);
+
+    shape = {
+      id: faker.number.int,
+      name: faker.lorem.word,
     };
-    mockRandom.mockReturnValueOnce(3);
 
-    const values = builder.addShape(() => shape).generateRandom(mockRandom, 10);
+    builder = new Builder(shape);
+    firstFooObject = builder.build();
+    secondFooObject = builder.build();
 
-    expect(values.length).toBe(3);
-    expect(mockRandom).toHaveBeenCalledWith(10, undefined);
-  });
-
-  it("should generate data in range", () => {
-    const shape: Partial<Foo> = {
-      id: 1,
-      name: "name",
-    };
-    mockRandom.mockReturnValueOnce(15);
-
-    const values = builder
-      .addShape(() => shape)
-      .generateRandom(mockRandom, 10, 20);
-
-    expect(values.length).toBe(15);
-    expect(mockRandom).toHaveBeenCalledWith(10, 20);
-  });
-
-  it("should generate random objects", () => {
-    const fakes = builder
-      .ruleFor("id", (faker) => faker.number.int())
-      .ruleFor("name", (faker) => faker.person.firstName())
-      .generate(2);
-
-    expect(fakes[0]).not.toEqual(fakes[1]);
-  });
-});
-
-describe("static and standalone functions", () => {
-  it("createBuilder standalone functions should work", () => {
-    const shape: Partial<Foo> = {
-      id: 1,
-      name: "name",
-    };
-    const value = createBuilder(() => shape).generate(2);
-    expect(value).toStrictEqual([shape, shape]);
-  });
-
-  it("generate standalone functions should work", () => {
-    const shape: Partial<Foo> = {
-      id: 1,
-      name: "name",
-    };
-    const value = generate(() => shape, 2);
-    expect(value).toStrictEqual([shape, shape]);
-  });
-
-  // it("faker works", () => {
-  //   setLocale("pt_BR");
-  //   const shape: Partial<Foo> = {
-  //     id: 1,
-  //     name: "name",
-  //   };
-  //   const value = generate<Foo>((f) => ({
-  //     id: f.number.int(),
-  //     name: f.person.fullName(),
-  //   }));
-
-  //   expect(value.name).toBeTruthy();
-  //   expect(value.id).toBeTruthy();
-  // });
-
-  it("should generate data in fix range", () => {
-    const shape: Partial<Foo> = {
-      id: 1,
-      name: "name",
-    };
-    mockRandom.mockReturnValueOnce(3);
-    const values = generateRandom(mockRandom, () => shape, 10);
-
-    expect(values.length).toBe(3);
-    expect(mockRandom).toHaveBeenCalledWith(10, undefined);
-  });
-
-  it("should generate 1 item if random returns 0", () => {
-    const shape: Partial<Foo> = {
-      id: 1,
-      name: "name",
-    };
-    mockRandom.mockReturnValueOnce(0);
-    const values = generateRandom(mockRandom, () => shape, 10);
-
-    expect(values.length).toBe(1);
-    expect(mockRandom).toHaveBeenCalledWith(10, undefined);
-  });
-
-  it("should generate data in range", () => {
-    const shape: Partial<Foo> = {
-      id: 1,
-      name: "name",
-    };
-    mockRandom.mockReturnValueOnce(15);
-    const values = generateRandom(mockRandom, () => shape, 10, 20);
-
-    expect(values.length).toBe(15);
-    expect(mockRandom).toHaveBeenCalledWith(10, 20);
+    expect(firstFooObject.id).not.equal(secondFooObject.id);
+    expect(firstFooObject.name).not.toEqual(secondFooObject.name);
   });
 });
