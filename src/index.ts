@@ -5,6 +5,7 @@ export type Shape<T> = {
  * Builds an object from a shape
  */
 export class Builder<T> {
+  /** @internal shape of the object */
   private _shape: Shape<T>;
 
   /**
