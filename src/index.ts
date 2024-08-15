@@ -1,3 +1,20 @@
+/**
+ * The shape of the object, where each key maps to a value or a function
+ * @type {Shape} - The shape of the object.
+ * @template T - The type of the object.
+ * @example
+ * ```ts
+ * interface Foo {
+ *   id: number;
+ *   name: string;
+ * }
+ * const builder = new Builder<Foo>({
+ *   id: 1,
+ *   name: "foo",
+ * });
+ * const foo = builder.build();
+ * // Result: { id: 1, name: "foo" }
+ */
 export type Shape<T> = {
   [K in keyof T]: T[K] | (() => T[K]);
 };
