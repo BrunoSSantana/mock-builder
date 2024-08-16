@@ -190,7 +190,7 @@ export class Builder<T> {
    * ```
    */
   applyDefaultValues(defaults: Partial<Shape<T>>): Builder<T> {
-    const newShape: Shape<T> = { ...this._shape, ...defaults, };
+    const newShape: Shape<T> = { ...this._shape, ...defaults };
     return new Builder(newShape);
   }
 }
