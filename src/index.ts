@@ -64,21 +64,50 @@ export class Builder<T> {
   }
 
   /**
-   * Constructs an object based on the shape provided during the builder's instantiation.
+   * Constructs one or more objects based on the shape provided during the builder's instantiation.
    *
-   * This method iterates over the shape and resolves each value. If a value is a function,
-   * it invokes the function to retrieve the final value; otherwise, it directly assigns
-   * the value.
-   *
-   * @returns An object of type `T` with all values resolved based on the shape.
+   * @param count - Optional. If a number is provided, it generates that many instances.
+   *                If an object with min and max is provided, it generates a random number of instances
+   *                between the min and max (inclusive).
+   * @returns A single object of type `T` or an array of objects if `count` or random count is specified.
    *
    * @example
    * ```ts
-   * const foo = builder.build();
-   * // Result: { id: 1, name: "foo" } or similar based on the shape
+   * const singleEntity = builder.build(); // Builds one entity
+   * const multipleEntities = builder.build(3); // Builds three entities
+   * const randomEntities = builder.build({ min: 2, max: 5 }); // Builds between 2 to 5 entities
    * ```
    */
-  build(): T {
+
+  build(): T;
+  build(count: 1): T;
+  build(count: number): T[];
+  build(count: { min: number; max: number }): T[];
+  build(count?: number | { min: number; max: number }): T | T[] {
+    let entitiesCount = 1;
+
+    if (typeof count === "number") {
+      entitiesCount = count;
+    } else if (
+      typeof count === "object" &&
+      count.min !== undefined &&
+      count.max !== undefined
+    ) {
+      entitiesCount = this.getRandomInt(count.min, count.max);
+    }
+
+    if (entitiesCount === 1) {
+      return this.buildSingle();
+    }
+
+    const entities: T[] = [];
+    for (let i = 0; i < entitiesCount; i++) {
+      entities.push(this.buildSingle());
+    }
+    return entities;
+  }
+
+  private buildSingle(): T {
     const data = Object.entries(this._shape).reduce((acc, [key, value]) => {
       acc[key as keyof T] =
         typeof value === "function"
@@ -88,6 +117,10 @@ export class Builder<T> {
     }, {} as T);
 
     return data;
+  }
+
+  private getRandomInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   /**
@@ -157,7 +190,7 @@ export class Builder<T> {
    * ```
    */
   applyDefaultValues(defaults: Partial<Shape<T>>): Builder<T> {
-    const newShape: Shape<T> = { ...defaults, ...this._shape };
+    const newShape: Shape<T> = { ...this._shape, ...defaults, };
     return new Builder(newShape);
   }
 }
