@@ -1,6 +1,6 @@
 {
     "name": "@brunoss/mock-builder",
-    "version": "0.0.2",
+    "version": "1.0.7",
     "description": "Mock Builder for FakerJS and Vitest",
     "author": "Bruno Santana <@brunossantana>",
     "main": "dist/index.js",
