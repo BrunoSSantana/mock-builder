@@ -1,9 +1,16 @@
-Forked from [fluentbuilder](https://github.com/lucasteles/fluentbuilder)
 # mock-builder
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![TypeScript](https://img.shields.io/badge/types-TypeScript-blue)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/brunossantana/mock-builder/main.yml?branch=main)](https://github.com/brunossantana/mock-builder/actions)
+[![GitHub](https://img.shields.io/github/license/brunossantana/mock-builder)](https://github.com/brunossantana/mock-builder/blob/main/LICENSE)
+[![npm](https://img.shields.io/npm/v/@brunoss/mock-builder)](https://www.npmjs.com/package/@brunoss/mock-builder)
+[![npm](https://img.shields.io/npm/dm/@brunoss/mock-builder)](https://www.npmjs.com/package/@brunoss/mock-builder)
+[![JSR](https://jsr.io/badges/@brunossantana/mock-builder)](https://jsr.io/@brunossantana/mock-builder)
+[![Bundle Size](https://img.shields.io/bundlephobia/min/@brunoss/mock-builder)](https://bundlephobia.com/result?p=@brunoss/mock-builder)
+[![Bundle Size](https://img.shields.io/bundlephobia/minzip/@brunoss/mock-builder)](https://bundlephobia.com/result?p=@brunoss/mock-builder)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/brunossantana/mock-builder)](https://github.com/brunossantana/mock-builder/pulse)
+[![GitHub last commit](https://img.shields.io/github/last-commit/brunossantana/mock-builder)](https://github.com/brunossantana/mock-builder/commits/main)
+[![codecov](https://codecov.io/github/brunossantana/mock-builder/graph/badge.svg)](https://codecov.io/github/brunossantana/mock-builder)
+
 
 ## Overview
 
@@ -122,3 +129,6 @@ console.log(myObject);
 - Returns: A new Builder instance.
 ## Contributing
 Contributions are welcome! Please feel free to submit a Pull Request or open an Issue on GitHub.
+
+## Credits
+based on [fluentbuilder](https://github.com/lucasteles/fluentbuilder)
