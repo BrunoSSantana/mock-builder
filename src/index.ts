@@ -193,4 +193,49 @@ export class Builder<T> {
     const newShape: Shape<T> = { ...this._shape, ...defaults };
     return new Builder(newShape);
   }
+
+  /**
+   * Transforms the value of a specific property in the shape using a provided mapping function.
+   *
+   * The `mapValue` method allows you to apply a transformation function to a property in the shape.
+   * The original value or function associated with the property is retrieved and passed to the mapping
+   * function (`mapFn`). The result of the mapping function is then set as the new value for the property.
+   *
+   * @template K - The type of the property key in the object shape.
+   * @param prop - The property name in the shape that you want to transform.
+   * @param mapFn - A function that takes the current value of the property and returns a new value.
+   *
+   * @returns The current `Builder` instance for chaining.
+   *
+   * @example
+   * ```ts
+   * const builder = new Builder<Foo>({ id: 1, name: "foo" });
+   * builder.mapValue('name', (name) => name.toUpperCase());
+   * const result = builder.build(); // { id: 1, name: "FOO" }
+   * ```
+   */
+  mapValue<K extends keyof T>(
+    prop: K,
+    mapFn: (value: T[K]) => T[K],
+  ): Builder<T> {
+    const original = this._shape[prop];
+
+        /**
+     * Resolves the original value of a property in the shape to its actual value.
+     *
+     * @return {T[K]} The resolved value of the property, either by executing a function or returning a static value.
+     */
+    const resolveValue = (): T[K] => {
+      return typeof original === "function"
+        ? (original as () => T[K])()
+        : (original as T[K]);
+    };
+
+    const newShape: Shape<T> = {
+      ...this._shape,
+      [prop]: () => mapFn(resolveValue()),
+    };
+
+    return new Builder(newShape);
+  }
 }

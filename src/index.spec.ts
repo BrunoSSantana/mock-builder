@@ -212,4 +212,85 @@ describe("class instance tests", () => {
     expect(userProfile).toHaveProperty("id", 2);
     expect(userProfile).toHaveProperty("name", "Default Name");
   });
+
+  describe("mapValue functionality tests", () => {
+    it("should map a value using a transformation function", () => {
+      const shape: Shape<Foo> = {
+        id: 1,
+        name: "foo",
+      };
+
+      const builder: Builder<Foo> = new Builder(shape);
+      const customBuilder = builder.mapValue("name", (name) =>
+        name.toUpperCase(),
+      );
+      const entity = customBuilder.build();
+
+      expect(entity.name).toBe("FOO");
+    });
+
+    it("should apply mapValue after withValue correctly", () => {
+      const shape: Shape<Foo> = {
+        id: 1,
+        name: "foo",
+      };
+
+      const builder: Builder<Foo> = new Builder(shape);
+      const customBuilder = builder
+        .withValue("name", "bar")
+        .mapValue("name", (name) => `${name}_suffix`);
+      const entity = customBuilder.build();
+
+      expect(entity.name).toBe("bar_suffix");
+    });
+
+    it("should apply mapValue to a function-based property", () => {
+      const shape: Shape<Foo> = {
+        id: 1,
+        name: () => "dynamic_name",
+      };
+
+      const builder: Builder<Foo> = new Builder(shape);
+      const customBuilder = builder.mapValue("name", (name) =>
+        name.toUpperCase(),
+      );
+      const entity = customBuilder.build();
+
+      expect(entity.name).toBe("DYNAMIC_NAME");
+    });
+
+    it("should apply multiple mapValue transformations sequentially", () => {
+      const shape: Shape<Foo> = {
+        id: 1,
+        name: "initial_name",
+      };
+
+      const builder: Builder<Foo> = new Builder(shape);
+      const customBuilder = builder
+        .mapValue("name", (name) => `${name}_suffix`)
+        .mapValue("name", (name) => `prefix_${name}`)
+        .mapValue("name", (name) => name.toUpperCase());
+
+      const entity = customBuilder.build();
+
+      expect(entity.name).toBe("PREFIX_INITIAL_NAME_SUFFIX");
+    });
+
+    it("should handle mapValue on multiple properties", () => {
+      const shape: Shape<Foo> = {
+        id: 1,
+        name: "foo",
+      };
+
+      const builder: Builder<Foo> = new Builder(shape);
+      const customBuilder = builder
+        .mapValue("name", (name) => name.toUpperCase())
+        .mapValue("id", (id) => id + 10);
+
+      const entity = customBuilder.build();
+
+      expect(entity.name).toBe("FOO");
+      expect(entity.id).toBe(11);
+    });
+  });
 });
