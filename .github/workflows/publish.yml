@@ -34,11 +34,11 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Release
-        # id: changesets
-        # uses: changesets/action@v1
-        # with:
-        #   publish: pnpm run release
-        run: npx semantic-release
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm run release
+        # run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
