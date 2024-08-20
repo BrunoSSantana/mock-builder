@@ -220,7 +220,7 @@ export class Builder<T> {
   ): Builder<T> {
     const original = this._shape[prop];
 
-        /**
+    /**
      * Resolves the original value of a property in the shape to its actual value.
      *
      * @return {T[K]} The resolved value of the property, either by executing a function or returning a static value.

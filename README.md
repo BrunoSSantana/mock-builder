@@ -28,13 +28,9 @@ The `mock-builder` is a TypeScript library designed to help you create objects b
 Install the package via npm:
 
 ```bash
-npm install immutable-builder
+npm i -D @brunoss/mock-builder
 ```
 
-or via yarn
-```bash
-yarn add immutable-builder
-```
 ## Usage
 ### Basic Usage
 ```ts
