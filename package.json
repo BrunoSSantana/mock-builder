@@ -1,76 +1,79 @@
 {
-    "name": "@brunoss/mock-builder",
-    "version": "1.0.11",
-    "description": "Mock Builder for FakerJS and Vitest",
-    "author": "Bruno Santana <@brunossantana>",
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "scripts": {
-        "build": "tsup src/index.ts --format cjs,esm --dts",
-        "test": "vitest",
-        "test:watch": "vitest --watch",
-        "test:cov": "vitest --coverage",
-        "commit": "git-cz",
-        "test:ui": "vitest --ui --coverage --watch",
-        "style:check": "npx @biomejs/biome check --write ./src",
-        "prepare": "npm run build",
-        "prepublishOnly": "npm test && npm run style:check",
-        "preversion": "npm run style:check",
-        "version": "npm run style:check && git add -A src",
-        "postversion": "git push && git push --tags",
-        "lint": "npx @biomejs/biome lint ./src",
-        "release": "pnpm run build && changeset publish"
-    },
-    "keywords": [
-        "Mock",
-        "Builder",
-        "Test"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/BrunoSSantana/mock-builder"
-    },
-    "license": "MIT",
-    "devDependencies": {
-        "@biomejs/biome": "1.8.3",
-        "@changesets/cli": "2.27.7",
-        "@faker-js/faker": "8.4.1",
-        "@vitest/coverage-v8": "2.0.5",
-        "@vitest/ui": "2.0.5",
-        "commitizen": "4.3.0",
-        "git-cz": "4.9.0",
-        "semantic-release": "24.0.0",
-        "tsup": "8.2.4",
-        "typescript": "5.5.4",
-        "vitest": "2.0.5"
-    },
-    "publishConfig": {
-        "access": "public"
-    },
-    "files": [
-        "dist",
-        "README.md"
-    ],
-    "release": {
-        "branches": [
-            "+([0-9])?(.{+([0-9]),x}).x",
-            "main",
-            "next",
-            "next-major",
-            {
-                "name": "beta",
-                "prerelease": true
-            },
-            {
-                "name": "alpha",
-                "prerelease": true
-            }
-        ]
-    },
-    "config": {
-        "commitizen": {
-            "path": "git-cz"
-        }
+  "name": "@brunoss/mock-builder",
+  "version": "1.0.11",
+  "description": "Mock Builder for FakerJS and Vitest",
+  "author": "Bruno Santana <@brunossantana>",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:cov": "vitest --coverage",
+    "commit": "git-cz",
+    "test:ui": "vitest --ui --coverage --watch",
+    "style:check": "npx @biomejs/biome check --write ./src",
+    "prepare": "husky",
+    "prepublishOnly": "npm test && npm run style:check",
+    "preversion": "npm run style:check",
+    "version": "npm run style:check && git add -A src",
+    "postversion": "git push && git push --tags",
+    "lint": "npx @biomejs/biome lint ./src",
+    "release": "pnpm run build && changeset publish"
+  },
+  "keywords": [
+    "Mock",
+    "Builder",
+    "Test"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BrunoSSantana/mock-builder"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@biomejs/biome": "1.8.3",
+    "@changesets/cli": "2.27.7",
+    "@commitlint/cli": "19.4.0",
+    "@commitlint/config-conventional": "19.2.2",
+    "@faker-js/faker": "8.4.1",
+    "@vitest/coverage-v8": "2.0.5",
+    "@vitest/ui": "2.0.5",
+    "commitizen": "4.3.0",
+    "git-cz": "4.9.0",
+    "husky": "9.1.5",
+    "semantic-release": "24.0.0",
+    "tsup": "8.2.4",
+    "typescript": "5.5.4",
+    "vitest": "2.0.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "release": {
+    "branches": [
+      "+([0-9])?(.{+([0-9]),x}).x",
+      "main",
+      "next",
+      "next-major",
+      {
+        "name": "beta",
+        "prerelease": true
+      },
+      {
+        "name": "alpha",
+        "prerelease": true
+      }
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "git-cz"
     }
+  }
 }
